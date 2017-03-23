@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bing_bic_img"
+        android:scaleType="centerCrop"
+        />
+
+    <android.support.v4.widget.DrawerLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/drawer_layout"
+        >
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:id="@+id/weather_layout"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <include  layout="@layout/title" ></include>
+                <include  layout="@layout/nowweather" ></include>
+                <include  layout="@layout/forcast" ></include>
+                <include  layout="@layout/airinfo" ></include>
+                <include  layout="@layout/suggestion" ></include>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+
+        <fragment
+            android:id="@+id/choose_area_fragment"
+            android:name="com.study.dh.myapplication.fragment.ChooseAreaFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            />
+
+    </android.support.v4.widget.DrawerLayout>
+
+
+
+
+</FrameLayout>

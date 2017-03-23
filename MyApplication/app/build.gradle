@@ -26,4 +26,15 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.1.1'
     testCompile 'junit:junit:4.12'
+
+    compile 'org.litepal.android:core:1.5.1'     //数据库 litepal 依赖
+    compile 'com.squareup.okhttp3:okhttp:3.6.0'   //okhttp3
+    compile 'com.github.bumptech.glide:glide:3.7.0'   //图片显示
+    compile 'com.google.code.gson:gson:2.7'       //json数据的解析
+
+    compile 'com.jakewharton:butterknife:7.0.1'   //注解
+
+
+    //Android Debug Database 是一个用于在Android应用中调试数据库和分享参数的强大的库。
+    debugCompile 'com.amitshekhar.android:debug-db:0.2.0'
 }
