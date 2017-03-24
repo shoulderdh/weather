@@ -1,10 +1,12 @@
 package com.study.dh.myapplication.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.study.dh.myapplication.R;
 import com.study.dh.myapplication.gson.WeatherInfo;
+import com.study.dh.myapplication.service.AutoUpdateWeatherService;
 import com.study.dh.myapplication.utils.HttpUtil;
 import com.study.dh.myapplication.utils.Utility;
 
@@ -177,16 +180,17 @@ public class WeatherActivity extends BaseActivity {
     }
 
     private void showWeatherInfo(WeatherInfo weather) {
+        if (weather != null && "ok".equals(weather.getHeWeather5().get(0).getStatus())) {
 
-        String cityName = weather.getHeWeather5().get(0).getBasic().getCity();
-        String updateTime = weather.getHeWeather5().get(0).getBasic().getUpdate().getLoc().split(" ")[1];
-        String degree = weather.getHeWeather5().get(0).getNow().getTmp() + "℃";
-        String weatherInfo = weather.getHeWeather5().get(0).getNow().getFl();
-        titleCity.setText(cityName);
-        titleUpdateTime.setText(updateTime);
-        degreeText.setText(degree);
-        weatherInfoText.setText(weatherInfo);
-        forecastLayout.removeAllViews();
+            String cityName = weather.getHeWeather5().get(0).getBasic().getCity();
+            String updateTime = weather.getHeWeather5().get(0).getBasic().getUpdate().getLoc().split(" ")[1];
+            String degree = weather.getHeWeather5().get(0).getNow().getTmp() + "℃";
+            String weatherInfo = weather.getHeWeather5().get(0).getNow().getFl();
+            titleCity.setText(cityName);
+            titleUpdateTime.setText(updateTime);
+            degreeText.setText(degree);
+            weatherInfoText.setText(weatherInfo);
+            forecastLayout.removeAllViews();
 //     //   for (WeatherInfo.HeWeather5Bean.DailyForecastBean forecast : weather.forecastList) {
 //         WeatherInfo.HeWeather5Bean.DailyForecastBean  forecast= (WeatherInfo.HeWeather5Bean.DailyForecastBean) weather.getHeWeather5().get(0).getDaily_forecast();
 //        for(int i=0;i<forecast.getAstro().getMr().;i++){
@@ -202,19 +206,25 @@ public class WeatherActivity extends BaseActivity {
 //            forecastLayout.addView(view);
 //        }
 
-        if (weather.getHeWeather5().get(0).getAqi() != null) {
-            aqiText.setText(weather.getHeWeather5().get(0).getAqi().getCity().getQlty());
-            pm25Text.setText(weather.getHeWeather5().get(0).getAqi().getCity().getPm25());
+            if (weather.getHeWeather5().get(0).getAqi() != null) {
+                aqiText.setText(weather.getHeWeather5().get(0).getAqi().getCity().getQlty());
+                pm25Text.setText(weather.getHeWeather5().get(0).getAqi().getCity().getPm25());
+            }
+            String comfort = "舒适度：" + weather.getHeWeather5().get(0).getSuggestion().getComf().getTxt();
+            String carWash = "洗车指数：" + weather.getHeWeather5().get(0).getSuggestion().getCw().getTxt();
+            String sport = "运行建议：" + weather.getHeWeather5().get(0).getSuggestion().getSport().getTxt();
+            comfortText.setText(comfort);
+            carWashText.setText(carWash);
+            sportText.setText(sport);
+            weatherLayout.setVisibility(View.VISIBLE);
+                Intent intent = new Intent(this, AutoUpdateWeatherService.class);
+              startService(intent);
+            Log.i("serviceweather","success");
+
+        }else {
+            Log.i("serviceweather","failure");
         }
-        String comfort = "舒适度：" + weather.getHeWeather5().get(0).getSuggestion().getComf().getTxt();
-        String carWash = "洗车指数：" + weather.getHeWeather5().get(0).getSuggestion().getCw().getTxt();
-        String sport = "运行建议：" + weather.getHeWeather5().get(0).getSuggestion().getSport().getTxt();
-        comfortText.setText(comfort);
-        carWashText.setText(carWash);
-        sportText.setText(sport);
-        weatherLayout.setVisibility(View.VISIBLE);
-    //    Intent intent = new Intent(this, AutoUpdateService.class);
-      //  startService(intent);
+
 
     }
 }
