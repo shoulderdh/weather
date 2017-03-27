@@ -15,3 +15,18 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontwarn butterknife.internal.**
+
+-keep class **$$ViewInjector { *; }
+
+-keepnames class * { @butterknife.InjectView *;}
+
+-dontwarn butterknife.Views$InjectViewProcessor
+
+-dontwarn com.gc.materialdesign.views.**
+
+-dontwarn okio.**
+
+
+#  混淆报错  增加混淆规则    https://github.com/square/okio/issues/60
+#   http://stackoverflow.com/questions/29192874/proguard-while-butterknife-library-and-other-warnings
