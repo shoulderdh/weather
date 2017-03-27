@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,11 +19,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.study.dh.myapplication.R;
 import com.study.dh.myapplication.gson.WeatherInfo;
+import com.study.dh.myapplication.httputils.HttpUtil;
+import com.study.dh.myapplication.httputils.UrlManage;
+import com.study.dh.myapplication.httputils.Utility;
 import com.study.dh.myapplication.service.AutoUpdateWeatherService;
-import com.study.dh.myapplication.utils.HttpUtil;
-import com.study.dh.myapplication.utils.Utility;
 
 import java.io.IOException;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import okhttp3.Call;
@@ -63,7 +66,6 @@ public class WeatherActivity extends BaseActivity {
         setContentView(R.layout.activity_weather);
         ButterKnife.bind(this);
         // 初始化各控件
-  //      bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
         weatherLayout = (ScrollView) findViewById(R.id.weather_layout);
         titleCity = (TextView) findViewById(R.id.title_city);
         titleUpdateTime = (TextView) findViewById(R.id.title_update_time);
@@ -116,8 +118,7 @@ public class WeatherActivity extends BaseActivity {
     }
 
     private void loadBingPic() {
-        String requestBingPic = "http://guolin.tech/api/bing_pic";
-        HttpUtil.sendOkHttpResponse(requestBingPic, new Callback() {
+        HttpUtil.sendOkHttpResponse(UrlManage.requestBingPic, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String bingPic = response.body().string();
@@ -140,8 +141,7 @@ public class WeatherActivity extends BaseActivity {
     }
 
     public void requestWeather( String mWeatherId) {
-        String weatherUrl = "https://free-api.heweather.com/v5/weather?city=" + mWeatherId + "&key=b27ff682edbe49e7a8100b1c9657e619";
-        HttpUtil.sendOkHttpResponse(weatherUrl, new Callback() {
+        HttpUtil.sendOkHttpResponse(UrlManage.weatherUrl+mWeatherId+UrlManage.hefengKey, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String responseText = response.body().string();
@@ -175,7 +175,6 @@ public class WeatherActivity extends BaseActivity {
                 });
             }
         });
-        //loadBingPic();
 
     }
 
@@ -191,20 +190,22 @@ public class WeatherActivity extends BaseActivity {
             degreeText.setText(degree);
             weatherInfoText.setText(weatherInfo);
             forecastLayout.removeAllViews();
-//     //   for (WeatherInfo.HeWeather5Bean.DailyForecastBean forecast : weather.forecastList) {
-//         WeatherInfo.HeWeather5Bean.DailyForecastBean  forecast= (WeatherInfo.HeWeather5Bean.DailyForecastBean) weather.getHeWeather5().get(0).getDaily_forecast();
-//        for(int i=0;i<forecast.getAstro().getMr().;i++){
-//            View view = LayoutInflater.from(this).inflate(R.layout.forcast_item, forecastLayout, false);
-//            TextView dateText = (TextView) view.findViewById(R.id.date_text);
-//            TextView infoText = (TextView) view.findViewById(R.id.info_text);
-//            TextView maxText = (TextView) view.findViewById(R.id.max_text);
-//            TextView minText = (TextView) view.findViewById(R.id.min_text);
-//            dateText.setText(forecast.date);
-//            infoText.setText(forecast.more.info);
-//            maxText.setText(forecast.temperature.max);
-//            minText.setText(forecast.temperature.min);
-//            forecastLayout.addView(view);
-//        }
+            List<WeatherInfo.HeWeather5Bean.DailyForecastBean>  forecast= weather.getHeWeather5().get(0).getDaily_forecast();
+            if (forecast.size()>0){
+                for(int i=0;i<forecast.size();i++){
+                    View view = LayoutInflater.from(this).inflate(R.layout.forcast_item, forecastLayout, false);
+                    TextView dateText = (TextView) view.findViewById(R.id.date_text);
+                    TextView infoText = (TextView) view.findViewById(R.id.info_text);
+                    TextView maxText = (TextView) view.findViewById(R.id.max_text);
+                    TextView minText = (TextView) view.findViewById(R.id.min_text);
+            dateText.setText(forecast.get(i).getDate());
+            infoText.setText(forecast.get(i).getCond().getTxt_d());
+            maxText.setText(forecast.get(i).getTmp().getMax());
+            minText.setText(forecast.get(i).getTmp().getMin());
+            forecastLayout.addView(view);
+                }
+            }
+
 
             if (weather.getHeWeather5().get(0).getAqi() != null) {
                 aqiText.setText(weather.getHeWeather5().get(0).getAqi().getCity().getQlty());

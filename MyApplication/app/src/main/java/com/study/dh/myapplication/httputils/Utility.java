@@ -1,4 +1,4 @@
-package com.study.dh.myapplication.utils;
+package com.study.dh.myapplication.httputils;
 
 import android.text.TextUtils;
 import android.util.Log;

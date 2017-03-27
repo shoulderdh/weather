@@ -9,13 +9,11 @@ import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.study.dh.myapplication.activity.WeatherActivity;
 import com.study.dh.myapplication.gson.WeatherInfo;
-import com.study.dh.myapplication.utils.HttpUtil;
-import com.study.dh.myapplication.utils.Utility;
+import com.study.dh.myapplication.httputils.HttpUtil;
+import com.study.dh.myapplication.httputils.UrlManage;
+import com.study.dh.myapplication.httputils.Utility;
 
 import java.io.IOException;
 
@@ -23,7 +21,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-import static com.study.dh.myapplication.R.id.bing_bic_img;
+import static com.study.dh.myapplication.httputils.UrlManage.requestBingPic;
+import static com.study.dh.myapplication.httputils.UrlManage.weatherUrl;
 
 /**
  * Created by dh on 2017/3/24.
@@ -52,8 +51,7 @@ public class AutoUpdateWeatherService  extends Service {
     }
 
     private void updateBingPic() {
-        String requestBingPic = "http://guolin.tech/api/bing_pic";
-        HttpUtil.sendOkHttpResponse(requestBingPic, new Callback() {
+        HttpUtil.sendOkHttpResponse(UrlManage.requestBingPic, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String bingPic = response.body().string();
@@ -76,8 +74,7 @@ public class AutoUpdateWeatherService  extends Service {
         if (weatherString!=null){
             WeatherInfo  weatherInfo=Utility.handleWeatherResponse(weatherString);
             String mWeatherId=weatherInfo.getHeWeather5().get(0).getBasic().getId();
-            String weatherUrl = "https://free-api.heweather.com/v5/weather?city=" + mWeatherId + "&key=b27ff682edbe49e7a8100b1c9657e619";
-            HttpUtil.sendOkHttpResponse(weatherUrl, new Callback() {
+            HttpUtil.sendOkHttpResponse(UrlManage.weatherUrl+mWeatherId+UrlManage.hefengKey, new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     final String responseText = response.body().string();

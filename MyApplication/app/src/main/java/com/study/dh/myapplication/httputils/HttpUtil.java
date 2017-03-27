@@ -1,6 +1,5 @@
-package com.study.dh.myapplication.utils;
+package com.study.dh.myapplication.httputils;
 
-import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 

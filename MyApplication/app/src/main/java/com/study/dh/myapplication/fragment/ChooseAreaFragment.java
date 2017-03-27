@@ -15,14 +15,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.Util;
 import com.study.dh.myapplication.MainActivity;
 import com.study.dh.myapplication.R;
 import com.study.dh.myapplication.activity.WeatherActivity;
 import com.study.dh.myapplication.db.City;
 import com.study.dh.myapplication.db.County;
 import com.study.dh.myapplication.db.Province;
-import com.study.dh.myapplication.utils.HttpUtil;
-import com.study.dh.myapplication.utils.Utility;
+import com.study.dh.myapplication.httputils.HttpUtil;
+import com.study.dh.myapplication.httputils.UrlManage;
+import com.study.dh.myapplication.httputils.Utility;
 
 import org.litepal.crud.DataSupport;
 
@@ -163,8 +165,7 @@ public class ChooseAreaFragment  extends Fragment {
             listView.setSelection(0);
             currentLevel = LEVEL_PROVINCE;
         } else {
-            String address = "http://guolin.tech/api/china";
-            queryFromServer(address, "province");
+            queryFromServer(UrlManage.baseAddress, "province");
         }
     }
 
