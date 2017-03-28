@@ -435,7 +435,7 @@ public class WeatherActivity extends BaseActivity {
                 }
                 //logMsg(sb.toString());
                 Log.i("location",sb.toString()+"fff");
-                Toast.makeText(MyApplication.getContext(),sb.toString(),Toast.LENGTH_SHORT).show();
+           //     Toast.makeText(MyApplication.getContext(),sb.toString(),Toast.LENGTH_SHORT).show();
             }
         }
 

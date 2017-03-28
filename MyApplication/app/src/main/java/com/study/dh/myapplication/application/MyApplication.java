@@ -9,7 +9,6 @@ import com.study.dh.myapplication.service.LocationService;
 
 import org.litepal.LitePal;
 
-import static android.os.Build.VERSION.SDK;
 
 
 /**
