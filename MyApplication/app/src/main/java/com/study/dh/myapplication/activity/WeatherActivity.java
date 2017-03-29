@@ -42,6 +42,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.baidu.location.h.j.p;
+import static com.baidu.location.h.j.v;
+
 public class WeatherActivity extends BaseActivity {
     private ScrollView weatherLayout;
 
@@ -49,7 +52,7 @@ public class WeatherActivity extends BaseActivity {
 
     private TextView titleCity;
 
-    private TextView titleUpdateTime;
+    private  ImageView  location_iv;
 
     private TextView degreeText;
 
@@ -72,9 +75,12 @@ public class WeatherActivity extends BaseActivity {
     public DrawerLayout  drawerLayout;
 
 
+
     private String permissionInfo;
     private final int SDK_PERMISSION_REQUEST = 127;
     private LocationService locationService;
+    boolean  isLoc=true;
+
 
 
 
@@ -137,20 +143,20 @@ public class WeatherActivity extends BaseActivity {
         } else if (type == 1) {
             locationService.setLocationOption(locationService.getOption());
         }
-//        startLocation.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                if (startLocation.getText().toString().equals(getString(R.string.startlocation))) {
+        location_iv.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (isLoc) {
                  locationService.start();// 定位SDK
-//                    // start之后会默认发起一次定位请求，开发者无须判断isstart并主动调用request
-//                    startLocation.setText(getString(R.string.stoplocation));
-//                } else {
-//                    locationService.stop();
-//                    startLocation.setText(getString(R.string.startlocation));
-//                }
-//            }
-//        });
+                    // start之后会默认发起一次定位请求，开发者无须判断isstart并主动调用request
+                    isLoc=false;
+                } else {
+                    locationService.stop();
+                    isLoc=true;
+                }
+           }
+       });
     }
 
     @Override
@@ -164,7 +170,6 @@ public class WeatherActivity extends BaseActivity {
         // 初始化各控件
         weatherLayout = (ScrollView) findViewById(R.id.weather_layout);
         titleCity = (TextView) findViewById(R.id.title_city);
-        titleUpdateTime = (TextView) findViewById(R.id.title_update_time);
         degreeText = (TextView) findViewById(R.id.degree_text);
         weatherInfoText = (TextView) findViewById(R.id.weather_info_text);
         forecastLayout = (LinearLayout) findViewById(R.id.forecast_layout);
@@ -173,7 +178,7 @@ public class WeatherActivity extends BaseActivity {
         comfortText = (TextView) findViewById(R.id.comfort_text);
         carWashText = (TextView) findViewById(R.id.car_wash_text);
         sportText = (TextView) findViewById(R.id.sport_text);
-
+        location_iv= (ImageView) findViewById(R.id.location_iv);
         bing_bic_img= (ImageView) findViewById(R.id.bing_bic_img);
 //        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
 //        swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
@@ -251,7 +256,6 @@ public class WeatherActivity extends BaseActivity {
             String degree = weather.getHeWeather5().get(0).getNow().getTmp() + "℃";
             String weatherInfo = weather.getHeWeather5().get(0).getNow().getFl();
             titleCity.setText(cityName);
-            titleUpdateTime.setText(updateTime);
             degreeText.setText(degree);
             weatherInfoText.setText(weatherInfo);
             forecastLayout.removeAllViews();
